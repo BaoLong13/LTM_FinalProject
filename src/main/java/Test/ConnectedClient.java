@@ -52,6 +52,9 @@ public class ConnectedClient implements Runnable {
 
                 if(input.equals("exit"))
                 {
+                    this.out.write("exit");
+                    this.out.newLine();
+                    this.out.flush();
                     clients.remove(this);
                     break;
                 }
@@ -109,7 +112,7 @@ public class ConnectedClient implements Runnable {
                 for (ConnectedClient client : clients)
                 {
 
-                    if (CheckIfExisted(processedInput[0]) == false)
+                    if (CheckIfExisted(processedInput[0]) == false && !processedInput[0].equals("chat") && !processedInput[0].equals("exit"))
                     {
                         this.out.write("There is no user with username " + processedInput[0]);
                         this.out.newLine();

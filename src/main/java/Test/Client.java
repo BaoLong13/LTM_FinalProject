@@ -53,6 +53,11 @@ class ReceiveMessage implements Runnable {
                 String data = in.readLine();
                  String[] processedData = new String[] {"",""};
 
+                 if (data.equals("exit"))
+                 {
+                     break;
+                 }
+
                 if (data.contains(";"))
                 {
                     processedData = data.split(";");
