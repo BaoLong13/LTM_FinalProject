@@ -2,6 +2,7 @@ package Test;
 
 import Ultis.State;
 
+import javax.swing.plaf.basic.BasicTreeUI;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class ConnectedClient implements Runnable {
         this.socket = s;
         this.in = new BufferedReader(new InputStreamReader(s.getInputStream()));
         this.out = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
-        this.currState = State.IN_LOBBY.getID();
+        this.currState = State.NEW_USER.getID();
         this.myName = "";
     }
 
@@ -59,13 +60,14 @@ public class ConnectedClient implements Runnable {
                 {
                     processedInput = input.split(";");
                 }
+
                 else
                 {
                     if (!(this.currState == State.IN_CHAT.getID()))
                     {
-                        out.write("User currently not in chat mode");
-                        out.newLine();
-                        out.flush();
+                        this.out.write("User currently not in chat mode");
+                        this.out.newLine();
+                        this.out.flush();
                     }
                     else
                     {
@@ -73,6 +75,14 @@ public class ConnectedClient implements Runnable {
                         this.pairedWith.out.newLine();
                         this.pairedWith.out.flush();
                     }
+                    continue;
+                }
+
+                if (!processedInput[1].equals("create") && this.currState == State.NEW_USER.getID())
+                {
+                    this.out.write("Username not created, user are not permitted to use available command");
+                    this.out.newLine();
+                    this.out.flush();
                     continue;
                 }
 
@@ -87,12 +97,25 @@ public class ConnectedClient implements Runnable {
                     }
                     else
                     {
+                        this.out.write("Connected to lobby, to chat with another user use invite user command");
+                        this.out.newLine();
+                        this.out.flush();
+                        this.currState = State.IN_LOBBY.getID();
                         this.myName = processedInput[0];
+                        clients.add(this);
                     }
                 }
 
                 for (ConnectedClient client : clients)
                 {
+
+                    if (CheckIfExisted(processedInput[0]) == false)
+                    {
+                        this.out.write("There is no user with username " + processedInput[0]);
+                        this.out.newLine();
+                        this.out.flush();
+                        break;
+                    }
 
                     if(processedInput[1].equals("exit"))
                     {
@@ -133,6 +156,8 @@ public class ConnectedClient implements Runnable {
                                 out.flush();
                                 break;
                             }
+
+
 
                             client.out.write(this.myName + ";" + "request");
                             client.out.newLine();

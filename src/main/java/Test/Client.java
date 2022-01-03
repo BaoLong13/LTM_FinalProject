@@ -25,7 +25,7 @@ class SendMessage implements Runnable {
     public void run() {
         try {
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("Input username");
+            System.out.println("Input create user command");
             while(true) {
                 String data = stdIn.readLine();
                 out.write(data + '\n');

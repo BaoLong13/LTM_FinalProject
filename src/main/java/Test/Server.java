@@ -22,7 +22,6 @@ public class Server {
             while(true) {
                 Socket socket = server.accept();
                 ConnectedClient client = new ConnectedClient(socket);
-                ConnectedClient.clients.add(client);
                 executor.execute(client);
             }
         } catch (IOException e) {
