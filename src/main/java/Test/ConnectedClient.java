@@ -139,9 +139,19 @@ public class ConnectedClient implements Runnable {
                         }
                     }
 
-                    if ( !client.myName.equals(this.myName) && client.myName.equals(processedInput[0]))
+                    if (!client.myName.equals(this.myName) && client.myName.equals(processedInput[0]))
                     {
-                        if (processedInput[1].equals("invite")) {
+
+                        if (processedInput[1].equals("invite"))
+                        {
+
+                            if (client.currState == State.MID_INVITE.getID() || this.currState == State.MID_INVITE.getID())
+                            {
+                                out.write( "User is being invite to chat");
+                                out.newLine();
+                                out.flush();
+                                break;
+                            }
 
                             if (client.currState == State.IN_CHAT.getID()) {
                                 out.write(client.myName + " is in chat mode");
@@ -157,7 +167,8 @@ public class ConnectedClient implements Runnable {
                                 break;
                             }
 
-
+                            client.currState = State.MID_INVITE.getID();
+                            this.currState = State.MID_INVITE.getID();
 
                             client.out.write(this.myName + ";" + "request");
                             client.out.newLine();
