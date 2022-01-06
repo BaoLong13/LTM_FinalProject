@@ -1,8 +1,7 @@
 package Test;
 
-import Ultis.State;
+import Ultility.State;
 
-import javax.swing.plaf.basic.BasicTreeUI;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -11,17 +10,17 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class ConnectedClient implements Runnable {
+public class ConnectedUser implements Runnable {
     public String myName;
     private Socket socket;
-    private  ConnectedClient pairedWith;
+    private ConnectedUser pairedWith;
     public int currState;
     BufferedReader in;
     BufferedWriter out;
 
-    public static ArrayList<ConnectedClient> clients = new ArrayList<>();
+    public static ArrayList<ConnectedUser> clients = new ArrayList<>();
 
-    public ConnectedClient(Socket s) throws IOException {
+    public ConnectedUser(Socket s) throws IOException {
         this.socket = s;
         this.in = new BufferedReader(new InputStreamReader(s.getInputStream()));
         this.out = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
@@ -31,7 +30,7 @@ public class ConnectedClient implements Runnable {
 
     public static  boolean CheckIfExisted(String username)
     {
-        for (ConnectedClient client : clients)
+        for (ConnectedUser client : clients)
         {
             if (client.myName.equals(username))
             {
@@ -109,7 +108,7 @@ public class ConnectedClient implements Runnable {
                     }
                 }
 
-                for (ConnectedClient client : clients)
+                for (ConnectedUser client : clients)
                 {
 
                     if (CheckIfExisted(processedInput[0]) == false && !processedInput[0].equals("chat") && !processedInput[0].equals("exit"))

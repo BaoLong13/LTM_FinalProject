@@ -3,7 +3,6 @@ package Test;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -21,7 +20,7 @@ public class Server {
             System.out.println("Waiting for client...");
             while(true) {
                 Socket socket = server.accept();
-                ConnectedClient client = new ConnectedClient(socket);
+                ConnectedUser client = new ConnectedUser(socket);
                 executor.execute(client);
             }
         } catch (IOException e) {
